@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <button id="btnMode" style="float: right">Dark Mode</button>
+    <h1 id="hText">Sample Text</h1>
+    <form action="">
+        Name: <input type="text" id="name"><br>
+        Course: <input type="text" id="course"><br>
+        Religion: <input type="text" id="religion"><br>
+    </form>
+    <button id="changeText">Change Background Color and Text</button>
+    <button id="btnHS">Hide/Show</button>
+    <!-- <button id="btnHide">Hide</button>
+    <button id="btnShow">Show</button> -->
+    <!-- <button id="pasko" >P</button> -->
+    <button id="appendButton">Append Text</button>
+
+    <script>
+        $(document).ready(function(){
+          $("#changeText").click(function(){
+            $("#htext").text("Welcome to JQuery Lesson");
+            $("body").css("background-color", "red");
+          });
+
+        //   $("#btnHide").click(function(){
+        //     $("#hText").hide();
+        //   });
+
+        //   $("#btnShow").click(function(){
+        //     $("#hText").show();
+        //   });
+
+          $("#hText").dblclick(function(){
+            $(this).hide(2000, function(){
+                alert("The Text is now hidde!!");
+            });
+          });
+
+        //   $("button").mouseenter(function(){
+        //     $(this).css("background-color", "blue");
+        //   });
+
+        //   $("button").mouseleave(function(){
+        //     $(this).css("background-color", "white");
+        //   });
+
+           $("button").hover(function(){
+            $(this).css("background-color", "blue");
+          },
+          function(){
+            $(this).css("background-color", "white");
+          });
+
+
+
+        //   $("#pasko").mouseleave(function(){
+        //     $("body").css("background-color", "blue");
+        //   });
+
+        //   $("#pasko").mouseenter(function(){
+        //     $("body").css("background-color", "red");
+        //   });
+     
+            $("input").focus(function(){
+                $(this).css("background-color", "lightblue");
+            })
+            
+            $("input").blur(function(){
+                $(this).css("background-color", "white");
+            })
+
+            $("#btnMode").click(function(){
+                
+                if ($("body").css("background-color") === "rgb(0, 0, 0)") { 
+                    $("body").css("background-color", "white"); 
+                    $("body").css("color", "black"); 
+                    $(this).text("Dark Mode"); 
+                } else {
+                    $("body").css("background-color", "black"); 
+                    $("body").css("color", "white");
+                    $(this).text("Light Mode");
+                }
+            });
+
+            $("#btnHS").click(function(){
+                $("#hText").toggle();
+            });
+
+            $("#appendButton").click(appendText);
+            
+            function appendText()
+        {
+            var txt1 = "<p>Text.</p>";
+            var txt2 = $("<p></p>").text("Text.");
+            var txt3 = document.createElement("p");
+
+            txt3.innerHTML = "Text.";
+            $("body").append(txt1, txt2, txt3);
+            }
+        });
+
+    </script>
+</body>
+</html>

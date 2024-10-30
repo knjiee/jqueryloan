@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Computation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #007BFF;
+            text-align: center;
+        }
+
+        form {
+            background-color: #ffffff;
+            border: 1px solid #007BFF;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #007BFF;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            color: #007BFF;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+        }
+
+        th, td {
+            border: 1px solid #007BFF;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        td {
+            background-color: #e9f6ff;
+        }
+
+        tr:hover {
+            background-color: #cfe9ff;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1>Loan Computation Application</h1>
+    <form id="loanForm">
+        <label>Loan Amount (₱):</label>
+        <input type="number" id="amount" required>
+        <br>
+        <label>Annual Interest Rate (%):</label>
+        <input type="number" id="interest" required>
+        <br>
+        <label>Loan Term (years):</label>
+        <input type="number" id="term" required>
+        <br>
+        <button type="button" id="calculateLoan">Calculate</button>
+    </form>
+    
+    <h2>Summary</h2>
+    <p id="monthlyPayment"></p>
+    <p id="totalPayment"></p>
+    <p id="totalInterest"></p>
+    
+    <table id="amortizationTable">
+        <tr>
+            <th>Payment Number</th>
+            <th>Principal</th>
+            <th>Payment Amount</th>
+            <th>Interest Payment</th>
+            <th>Principal Payment</th>
+            <th>Remaining Balance</th>
+        </tr>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#calculateLoan').click(function () {
+                var amount = parseFloat($('#amount').val());
+                var annualInterest = parseFloat($('#interest').val());
+                var term = parseInt($('#term').val());
+                
+                var monthlyInterest = annualInterest / 100 / 12;
+                var numberOfPayments = term * 12;
+
+                var monthlyPayment = amount * (
+                                    (monthlyInterest * Math.pow(1 + (monthlyInterest), numberOfPayments)) /
+                                    (Math.pow(1 + (monthlyInterest), numberOfPayments) - 1)
+                                );
+                
+                let remainingBalance = amount;
+                let totalInterestPaid = 0;
+
+                for (let i = 1; i <= numberOfPayments; i++) {
+                    var interestPayment = remainingBalance * monthlyInterest;
+                    var principalPayment = monthlyPayment - interestPayment;
+                    remainingBalance -= principalPayment;
+                    totalInterestPaid += interestPayment;
+
+                    $('#amortizationTable').append(`<tr>
+                        <td>${i}</td>
+                        <td>₱${principalPayment.toFixed(2)}</td>
+                        <td>₱${monthlyPayment.toFixed(2)}</td>
+                        <td>₱${interestPayment.toFixed(2)}</td>
+                        <td>₱${principalPayment.toFixed(2)}</td>
+                        <td>₱${remainingBalance.toFixed(2)}</td>
+                    </tr>`);
+                }
+
+                var totalPayment = numberOfPayments * monthlyPayment;
+
+                $('#monthlyPayment').text(`Monthly Payment: ₱${monthlyPayment.toFixed(2)}`);
+                $('#totalPayment').text(`Total Payment Amount: ₱${totalPayment.toFixed(2)}`);
+                $('#totalInterest').text(`Total Interest Paid: ₱${totalInterestPaid.toFixed(2)}`);
+            });
+        });
+    </script>
+</body>
+</html>
